@@ -134,8 +134,9 @@ private:
     ftf::EigenMapConstCovariance6d cov_map(cov_ned.data());
 
     mavlink::common::msg::VISION_POSITION_ESTIMATE vp{};
-
-    vp.usec = stamp.nanoseconds() / 1000;
+    
+    double usec = (stamp.seconds() + stamp.nanoseconds()/1e9) * 1e6;
+    vp.usec = static_cast<int>(usec);
     // [[[cog:
     // for f in "xyz":
     //     cog.outl(f"vp.{f} = position.{f}();")
